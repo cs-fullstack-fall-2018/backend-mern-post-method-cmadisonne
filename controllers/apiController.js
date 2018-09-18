@@ -10,10 +10,23 @@ module.exports = function (app) {
     app.use(bodyParser.urlencoded({extended: true})); // Parse out any JSON from body and handle URL encoded data
 
     //  Add a method to get all todos for a particular User (uname)
-    app.get('/api/todo/:uname', function (req, res) {
+    app.get('/api/todos/:uname', function (req, res) {
 
         // ROUTE: GET a user's list of todos
         Todos.find({username: req.params.uname}, function (err, todos) { //Use the find method on the data model to search DB
+            if (err) {
+                throw err; // If we get an error then bail
+            }
+            // Use Express to send the JSON back to the client in the web response
+            res.send(todos);
+        });
+
+    });
+
+    app.get('/api/todos', function (req, res) {
+
+        // ROUTE: GET ALL todos
+        Todos.find({}, function (err, todos) { //Use the find method on the data model to search DB
             if (err) {
                 throw err; // If we get an error then bail
             }
